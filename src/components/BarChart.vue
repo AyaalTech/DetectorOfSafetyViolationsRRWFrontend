@@ -18,18 +18,21 @@ export default {
   props: ['ducking', 'vest'],
   computed: {
     chartData() {
+      const totalDucking = this.ducking.length;
+      const totalVest = this.vest.length;
+
       return {
-        labels: ['Ducking', 'Vest'],
+        labels: ['Нарушения'],
         datasets: [
           {
-            label: 'Ducking',
+            label: 'Опасность у поезда',
             backgroundColor: '#FF6384',
-            data: this.ducking,
+            data: [totalDucking],
           },
           {
-            label: 'Vest',
+            label: 'Отсутсвие СИЗ',
             backgroundColor: '#36A2EB',
-            data: this.vest,
+            data: [totalVest],
           },
         ],
       };
