@@ -37,7 +37,7 @@ export default {
         const formData = new FormData();
         formData.append('file', file);
 
-        await axios.post('http://192.168.110.63:3000/upload', formData, {
+        await axios.post('http://192.168.110.209:3000/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
