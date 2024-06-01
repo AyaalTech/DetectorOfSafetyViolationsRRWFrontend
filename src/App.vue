@@ -1,6 +1,7 @@
 <script setup>
 import MainPanel from './components/MainPanel.vue'
 import PlayerPage from './components/PlayerPage.vue'
+import ChartElement from './components/ChartElement.vue';
 import NavigationElement from './components/NavigationElement.vue'
 </script>
 
@@ -9,6 +10,7 @@ import NavigationElement from './components/NavigationElement.vue'
   <img src="./../public/red_icon.png" alt="RWW" class="app-icon" />
   <MainPanel class="component-divider"/>
   <PlayerPage class="component-divider"/>
+  <ChartElement class="component-divider"/>
 </template>
 
 <style>
@@ -18,6 +20,7 @@ import NavigationElement from './components/NavigationElement.vue'
   z-index: 10;
   top: 0;
   left: 0;
+  border-bottom-right-radius: 5px;
 }
 
 .component-divider {

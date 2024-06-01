@@ -2,7 +2,7 @@ why uploading doesnt work
 <template>
   <div class="main-panel-container">
     <h1 class="va-h1">Анализ видео на предмет нарушения техники безопасности👷‍♂️</h1>
-    <h2 class="va-h3" style="z-index: 10;">Загрузите видео в формате mp4</h2>
+    <h2 class="va-h3" style="z-index: 10;">Загрузите видео в формате <span style="font-style: italic;">mp4</span></h2>
 
     <VaFileUpload
       v-model="uploader"
@@ -13,7 +13,7 @@ why uploading doesnt work
       color="#e63c3c"
     />
     <VaButton @click="startUpload" :loading="isLoading" size="large" color="#e21a1a"> 
-      Отправить видео⬆️
+      <VaIcon name="send" />Отправить видео
     </VaButton>
   </div>
 </template>

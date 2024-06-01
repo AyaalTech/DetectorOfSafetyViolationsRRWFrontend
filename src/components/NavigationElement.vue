@@ -1,5 +1,6 @@
 <template>
     <nav class="navigation-bar">
+      <VaIcon name="menu" />
       <ul>
         <li v-for="(item, index) in items" :key="index" @click="scrollToSection(index)">
           {{ item }}
@@ -28,12 +29,12 @@
   <style scoped>
   .navigation-bar {
     position: fixed;
-    border-bottom-left-radius: 10px;
+    border-bottom-left-radius: 8px;
     right: 0;
     top: 0; 
+    font-size: 0.8em;
     background-color: #e63c3c;
     font-weight: bold;
-    opacity: 0.45;
     color: white;
     padding-left: 0.5rem;
     padding-right: 1rem;
@@ -56,13 +57,12 @@
   }
   
   .navigation-bar:hover {
-    opacity: 1;
     transition: 350ms ease; 
   }
 
   .navigation-bar li:hover {
     background-color: #e63c3c;
-    font-size: 1.2em;
+    font-size: 1.5em;
     padding: 0.5rem; 
     transition: 350ms ease; 
   }

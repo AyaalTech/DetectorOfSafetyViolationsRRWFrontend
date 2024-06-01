@@ -6,13 +6,13 @@
       </video>
       <div v-else class="loader"></div>
       <div v-for="(url, index) in videoUrls" :key="index">
-        <VaButton preset="secondary" class="mr-6 mb-2" @click="fetchVideo(url)">
+        <VaButton color="#e21a1a" preset="secondary" class="mr-6 mb-2" @click="fetchVideo(url)">
           Play Video: {{ url }}
         </VaButton>
       </div>
       <div style="display: flex">
         <div class="timestamp-container">
-        <h2 class="va-h2">Однозначные нарушения: {{ obviousCount }}</h2>
+        <h4 class="va-h4">Однозначные нарушения: {{ obviousCount }}</h4>
         <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
           <VaButton v-for="(item, index) in testJson" :key="index"
             color="danger"
@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="timestamp-container">
-        <h2 class="va-h2">Неоднозначные нарушения: {{ unclearCount }}</h2>
+        <h4 class="va-h4">Неоднозначные нарушения: {{ unclearCount }}</h4>
           <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
             <VaButton v-for="(item, index) in testJson" :key="index"
               color="warning"
