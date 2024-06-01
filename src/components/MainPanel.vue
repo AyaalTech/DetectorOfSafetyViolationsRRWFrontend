@@ -2,7 +2,7 @@ why uploading doesnt work
 <template>
   <div class="main-panel-container">
     <h1 class="va-h1">Анализ видео на предмет нарушения техники безопасности 👷‍♂️</h1>
-    <h2 class="va-h3">Загрузите видео в формате mp4</h2>
+    <h2 class="va-h3" style="z-index: 10;">Загрузите видео в формате mp4</h2>
 
     <VaFileUpload
       v-model="uploader"
@@ -59,8 +59,8 @@ export default {
 .main-panel-container {
   padding-top: 6rem;
   padding-bottom: 6rem;
-  padding-left: 14rem;
-  padding-right: 14rem;
+  padding-left: 22rem;
+  padding-right: 20rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
