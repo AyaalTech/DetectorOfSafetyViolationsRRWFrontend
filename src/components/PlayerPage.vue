@@ -6,9 +6,9 @@
       </video>
       <div v-else class="loader"></div>
       <div v-for="(url, index) in videoUrls" :key="index">
-        <button @click="fetchVideo(url)">
+        <VaButton preset="secondary" class="mr-6 mb-2" @click="fetchVideo(url)">
           Play Video: {{ url }}
-        </button>
+        </VaButton>
       </div>
       <div style="display: flex">
         <div class="timestamp-container">
@@ -47,7 +47,7 @@
     </div>
   </template>
   
-  <script>
+<script>
 import axios from 'axios';
 
 export default {
@@ -120,13 +120,14 @@ export default {
   align-items: center;
   flex-direction: column;
   width: 100%;
-  height: fit-content;
+  height: 100vh;
 }
 
 video {
   max-width: 70%;
   width: 70%;
   height: auto;
+  max-height: 70%;
 }
 
 .loader {
@@ -149,5 +150,6 @@ video {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1.5rem;
 }
 </style>
