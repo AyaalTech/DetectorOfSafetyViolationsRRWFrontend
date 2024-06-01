@@ -28,16 +28,18 @@
   <style scoped>
   .navigation-bar {
     position: fixed;
-    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
     right: 0;
-    bottom: 0; 
-    background-color: #e21a1a;
+    top: 0; 
+    background-color: #e63c3c;
     font-weight: bold;
-    opacity: 0.8;
+    opacity: 0.45;
     color: white;
     padding-left: 0.5rem;
     padding-right: 1rem;
     padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    transition: 250ms ease; 
   }
   
   .navigation-bar ul {
@@ -53,6 +55,11 @@
     transition: 250ms ease; 
   }
   
+  .navigation-bar:hover {
+    opacity: 1;
+    transition: 350ms ease; 
+  }
+
   .navigation-bar li:hover {
     background-color: #e63c3c;
     font-size: 1.2em;

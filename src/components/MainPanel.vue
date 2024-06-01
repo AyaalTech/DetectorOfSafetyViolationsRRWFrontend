@@ -57,7 +57,7 @@ export default {
 
 <style>
 .main-panel-container {
-  padding-top: 6rem;
+  justify-content: center;
   padding-bottom: 6rem;
   padding-left: 22rem;
   padding-right: 20rem;
