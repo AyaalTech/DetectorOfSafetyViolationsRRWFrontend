@@ -5,25 +5,35 @@
         Your browser does not support the video tag.
       </video>
       <div v-else class="loader"></div>
-        <div style="display: flex;">
-          <div class="timestamp-container">
-            <h2 class="va-h2">⚠️Однозначные нарушения:</h2>
-            <VaButton v-for="(item, index) in testJson" :key="index"
-              color="danger"
-              class="mr-6 mb-2"
-              round
-              icon="warning"
-              border-color="danger"
-              @click="seekToTime(item.timestamp)"
-            >
-              {{ item.timestamp }}
-            </VaButton>
-          </div>
-          <div class="timestamp-container">
-            <h2 class="va-h2">❓Неоднозначные нарушения:</h2>
+      <div v-for="(url, index) in videoUrls" :key="index">
+        <button @click="fetchVideo(url)">
+          Play Video: {{ url }}
+        </button>
+      </div>
+      <div style="display: flex">
+        <div class="timestamp-container">
+        <h2 class="va-h2">Однозначные нарушения: {{ obviousCount }}</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
+          <VaButton v-for="(item, index) in testJson" :key="index"
+            color="danger"
+            class="mr-6 mb-2"
+            preset="secondary"
+            round
+            icon="warning"
+            border-color="danger"
+            @click="seekToTime(item.timestamp)"
+          >
+            {{ item.timestamp }}
+          </VaButton>
+        </div>
+      </div>
+      <div class="timestamp-container">
+        <h2 class="va-h2">Неоднозначные нарушения: {{ unclearCount }}</h2>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
             <VaButton v-for="(item, index) in testJson" :key="index"
               color="warning"
               class="mr-6 mb-2"
+              preset="secondary"
               round
               icon="help"
               border-color="warning"
@@ -33,6 +43,7 @@
             </VaButton>
           </div>
         </div>
+      </div>
     </div>
   </template>
   
@@ -46,98 +57,8 @@ export default {
       videoSrc: null,
       testJson: [
           {
-            "timestamp": "00:02",
-            "value": "faintly",
-            "date": "2024-06-05"
-          },
-          {
-            "timestamp": "00:37",
-            "value": "obvious",
-            "date": "2024-06-14"
-          },
-          {
-            "timestamp": "00:21",
-            "value": "faintly",
-            "date": "2024-06-22"
-          },
-          {
-            "timestamp": "00:58",
-            "value": "obvious",
-            "date": "2024-06-08"
-          },
-          {
-            "timestamp": "00:46",
-            "value": "obvious",
-            "date": "2024-06-18"
-          },
-          {
-            "timestamp": "00:19",
-            "value": "faintly",
-            "date": "2024-06-07"
-          },
-          {
-            "timestamp": "00:49",
-            "value": "obvious",
-            "date": "2024-06-16"
-          },
-          {
-            "timestamp": "00:04",
-            "value": "faintly",
-            "date": "2024-06-25"
-          },
-          {
-            "timestamp": "00:28",
-            "value": "faintly",
-            "date": "2024-06-12"
-          },
-          {
-            "timestamp": "00:33",
-            "value": "obvious",
-            "date": "2024-06-03"
-          },
-          {
-            "timestamp": "00:45",
-            "value": "obvious",
-            "date": "2024-06-27"
-          },
-          {
-            "timestamp": "00:11",
-            "value": "faintly",
-            "date": "2024-06-21"
-          },
-          {
-            "timestamp": "00:57",
-            "value": "obvious",
-            "date": "2024-06-30"
-          },
-          {
-            "timestamp": "00:14",
-            "value": "faintly",
-            "date": "2024-06-09"
-          },
-          {
-            "timestamp": "00:38",
-            "value": "faintly",
-            "date": "2024-06-04"
-          },
-          {
-            "timestamp": "00:25",
-            "value": "obvious",
-            "date": "2024-06-13"
-          },
-          {
-            "timestamp": "00:51",
-            "value": "faintly",
-            "date": "2024-06-01"
-          },
-          {
-            "timestamp": "00:16",
-            "value": "obvious",
-            "date": "2024-06-28"
-          },
-          {
             "timestamp": "00:09",
-            "value": "faintly",
+            "value": "unclear",
             "date": "2024-06-11"
           },
           {
@@ -146,15 +67,33 @@ export default {
             "date": "2024-06-24"
           }
         ],
+        videoUrls: [],
     };
   },
   mounted() {
-    this.fetchVideo();
+    this.fetchVideoUrls();
+  },
+  computed: {
+    obviousCount() {
+        return this.testJson.filter(item => item.value === 'obvious').length;
+    },
+    unclearCount() {
+        return this.testJson.filter(item => item.value === 'unclear').length;
+    }
   },
   methods: {
-    async fetchVideo() {
+    async fetchVideoUrls() {
       try {
-        const response = await axios.get('http://192.168.110.209:3000/getvideo', { responseType: 'blob' });
+        const response = await axios.get('http://192.168.110.63:3000/getvideos', { responseType: 'json' });
+        this.videoUrls = response.data.files;
+        console.log(this.videoUrls);
+      } catch (error) {
+        console.error('Error fetching video data:', error);
+      }
+    },
+    async fetchVideo(name) {
+      try {
+        const response = await axios.get(`http://192.168.110.63:3000/getvideo/${name}`, { responseType: 'blob' });
         const blob = new Blob([response.data], { type: 'video/mp4' });
         this.videoSrc = URL.createObjectURL(blob);
       } catch (error) {
@@ -185,14 +124,14 @@ export default {
 }
 
 video {
-  max-width: 100%;
-  width: 100%;
+  max-width: 70%;
+  width: 70%;
   height: auto;
 }
 
 .loader {
-  width: 120px;
-  height: 20px;
+  width: 200px;
+  height: 30px;
   border-radius: 20px;
   background:
     repeating-linear-gradient(135deg,#f03355 0 10px,#ffa516 0 20px) 0/0%   no-repeat,
@@ -207,8 +146,8 @@ video {
 .timestamp-container {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
 }
 </style>

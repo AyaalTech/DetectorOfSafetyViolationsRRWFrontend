@@ -12,10 +12,6 @@ import NavigationElement from './components/NavigationElement.vue'
 </template>
 
 <style>
-body {
-  background-color: #f6f6f6;
-}
-
 .app-icon {
   width: 4rem;
   position: sticky;
