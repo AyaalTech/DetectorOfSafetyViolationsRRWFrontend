@@ -24,67 +24,45 @@
         {{ url }}
       </VaButton>
     </div>
-    <div style="display: flex">
-      <div class="timestamp-container">
-        <h5 class="va-h5">
-          <VaIcon name="schedule" style="margin-right: 0.5rem;"/>
-          тайм-коды нарушений: {{ obviousCount }}
-        </h5>
-        <div style="display: flex; gap: 1rem;">
-          <VaButton
-            v-for="(item, index) in testJson"
-            :key="index"
-            color="danger"
-            class="mr-6 mb-2"
-            preset="secondary"
-            round
-            icon="warning"
-            border-color="danger"
-            @click="seekToTime(item.timestamp)"
-          >
-            {{ item.timestamp }}
-          </VaButton>
-        </div>
+    <h5 class="va-h5">
+      <VaIcon name="warning" style="margin-right: 0.5rem;"/>
+      выявленные нарушения:
+    </h5>
+    <div style="display: flex; justify-content: space-between;">
+      <div class="timestamp-container" v-for="(time, index) in ducking" :key="'ducking-' + index" style="color: red;">
+        <VaButton color="#e21a1a" preset="secondary" border-color="#e21a1a" @click="seekToTime(time)" style="margin-right: 0.5rem;"><VaIcon name="train" />Опасность у поезда, {{ convertSecondsToString(time) }}</VaButton>
+      </div>
+      <div class="timestamp-container" v-for="(time, index) in vest" :key="'vest-' + index" style="color: blue;">
+        <VaButton color="#d9802e" preset="secondary" border-color="#d9802e" @click="seekToTime(time)" style="margin-right: 0.5rem;"><VaIcon name="engineering" />Отсутствие СИЗ, {{ convertSecondsToString(time) }}</VaButton>
       </div>
     </div>
   </div>
+  <BarChart :ducking="ducking" :vest="vest" />
 </template>
 
 <script>
 import axios from 'axios';
+import BarChart from './BarChart.vue';
 
 export default {
   name: 'PlayerPage',
   data() {
     return {
+      ducking: [],
+      vest: [],
       videoSrc: null,
-      testJson: [
-          {
-            "timestamp": "00:09",
-            "value": "unclear",
-            "date": "2024-06-11"
-          },
-          {
-            "timestamp": "00:43",
-            "value": "obvious",
-            "date": "2024-06-24"
-          }
-        ],
-        videoUrls: [],
+      videoUrls: [],
     };
   },
   mounted() {
     this.fetchVideoUrls();
   },
-  computed: {
-    obviousCount() {
-        return this.testJson.filter(item => item.value === 'obvious').length;
-    },
-    unclearCount() {
-        return this.testJson.filter(item => item.value === 'unclear').length;
-    }
-  },
   methods: {
+    convertSecondsToString(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    },
     async fetchVideoUrls() {
       try {
         const response = await axios.get('http://192.168.110.63:3000/getvideos', { responseType: 'json' });
@@ -103,22 +81,35 @@ export default {
         const violationResponse = await axios.get(`http://192.168.110.63:3000/getviolation/${name}`);
         const violationData = violationResponse.data;
 
-        this.violationDetails = violationData;
+        this.ducking = violationData.ducking;
+        this.vest = violationData.vest;
 
         console.log(violationData);
       } catch (error) {
         console.error('Error fetching video or violation data:', error);
       }
     },
-    seekToTime(time) {
-      const totalSeconds = this.convertTimeStringToSeconds(time);
+    seekToTime(timeString) {
+      const totalSeconds = parseInt(timeString, 10);
+      const formattedTimeString = this.convertSecondsToString(totalSeconds);
       this.$refs.videoPlayer.currentTime = totalSeconds;
+      console.log(formattedTimeString);
     },
-    convertTimeStringToSeconds(timeString) {
-      const [minutes, seconds] = timeString.split(':').map(Number);
-      return minutes * 60 + seconds;
-    }
-  }
+    convertSecondsToString(seconds) {
+      let hours = Math.floor(seconds / 3600);
+      let minutes = Math.floor((seconds % 3600) / 60);
+      let remainingSeconds = seconds % 60;
+
+      hours = hours < 10? '0' + hours : hours;
+      minutes = minutes < 10? '0' + minutes : minutes;
+      remainingSeconds = remainingSeconds < 10? '0' + remainingSeconds : remainingSeconds;
+
+      return `${hours}:${minutes}:${remainingSeconds}`;
+    },
+  },
+  components: {
+    BarChart,
+  },
 };
 </script>
   

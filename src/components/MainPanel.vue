@@ -1,4 +1,3 @@
-why uploading doesnt work
 <template>
   <div class="main-panel-container">
     <h1 class="va-h1">Анализ видео на предмет нарушения техники безопасности👷‍♂️</h1>
