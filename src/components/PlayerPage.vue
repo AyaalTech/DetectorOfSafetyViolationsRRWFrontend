@@ -1,20 +1,39 @@
 <template>
-    <div class="player-page">
-      <video ref="videoPlayer" v-if="videoSrc" controls>
-        <source :src="videoSrc" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-      <div v-else class="loader"></div>
-      <div v-for="(url, index) in videoUrls" :key="index">
-        <VaButton color="#e21a1a" preset="secondary" class="mr-6 mb-2" @click="fetchVideo(url)">
-          Play Video: {{ url }}
-        </VaButton>
-      </div>
-      <div style="display: flex">
-        <div class="timestamp-container">
-        <h4 class="va-h4">Однозначные нарушения: {{ obviousCount }}</h4>
-        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
-          <VaButton v-for="(item, index) in testJson" :key="index"
+  <div class="player-page">
+    <video
+      v-if="videoSrc"
+      ref="videoPlayer"
+      controls
+    >
+      <source :src="videoSrc" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    <div v-else class="loader" style="margin-bottom: 3rem;"></div>
+    <h5 class="va-h5">
+      <VaIcon name="play_arrow" style="margin-right: 0.5rem;"/>
+      доступные видео:
+    </h5>
+    <div v-for="(url, index) in videoUrls" :key="index">
+      <VaButton
+        color="#e21a1a"
+        preset="secondary"
+        @click="fetchVideo(url)"
+        style="gap: 0.8rem;"
+      >
+        <VaIcon name="link" style="margin-right: 0.5rem;"/>
+        {{ url }}
+      </VaButton>
+    </div>
+    <div style="display: flex">
+      <div class="timestamp-container">
+        <h5 class="va-h5">
+          <VaIcon name="schedule" style="margin-right: 0.5rem;"/>
+          тайм-коды нарушений: {{ obviousCount }}
+        </h5>
+        <div style="display: flex; gap: 1rem;">
+          <VaButton
+            v-for="(item, index) in testJson"
+            :key="index"
             color="danger"
             class="mr-6 mb-2"
             preset="secondary"
@@ -27,26 +46,10 @@
           </VaButton>
         </div>
       </div>
-      <div class="timestamp-container">
-        <h4 class="va-h4">Неоднозначные нарушения: {{ unclearCount }}</h4>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center;">
-            <VaButton v-for="(item, index) in testJson" :key="index"
-              color="warning"
-              class="mr-6 mb-2"
-              preset="secondary"
-              round
-              icon="help"
-              border-color="warning"
-              @click="seekToTime(item.timestamp)"
-            >
-              {{ item.timestamp }}
-            </VaButton>
-          </div>
-        </div>
-      </div>
     </div>
-  </template>
-  
+  </div>
+</template>
+
 <script>
 import axios from 'axios';
 
@@ -93,11 +96,18 @@ export default {
     },
     async fetchVideo(name) {
       try {
-        const response = await axios.get(`http://192.168.110.63:3000/getvideo/${name}`, { responseType: 'blob' });
-        const blob = new Blob([response.data], { type: 'video/mp4' });
-        this.videoSrc = URL.createObjectURL(blob);
+        const videoResponse = await axios.get(`http://192.168.110.63:3000/getvideo/${name}`, { responseType: 'blob' });
+        const videoBlob = new Blob([videoResponse.data], { type: 'video/mp4' });
+        this.videoSrc = URL.createObjectURL(videoBlob);
+
+        const violationResponse = await axios.get(`http://192.168.110.63:3000/getviolation/${name}`);
+        const violationData = violationResponse.data;
+
+        this.violationDetails = violationData;
+
+        console.log(violationData);
       } catch (error) {
-        console.error('Error fetching video:', error);
+        console.error('Error fetching video or violation data:', error);
       }
     },
     seekToTime(time) {
@@ -116,7 +126,7 @@ export default {
 .player-page {
   text-align: center;
   display: flex;
-  justify-content: center;
+  justify-content:center;
   align-items: center;
   flex-direction: column;
   width: 100%;
@@ -124,10 +134,10 @@ export default {
 }
 
 video {
-  max-width: 70%;
-  width: 70%;
-  height: auto;
-  max-height: 70%;
+  width: auto;
+  height: 65%;
+  border-radius: 10px;
+  border: #e21a1a 1px solid;
 }
 
 .loader {

@@ -13,7 +13,7 @@ why uploading doesnt work
       color="#e63c3c"
     />
     <VaButton @click="startUpload" :loading="isLoading" size="large" color="#e21a1a"> 
-      <VaIcon name="send" />Отправить видео
+       Отправить видео <VaIcon name="send" style="margin-left: 0.5rem;"/>
     </VaButton>
   </div>
 </template>
