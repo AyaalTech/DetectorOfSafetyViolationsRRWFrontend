@@ -1,9 +1,11 @@
 <template>
-  <Bar
-    id="my-chart-id"
-    :options="chartOptions"
-    :data="chartData"
-  />
+  <div class="chart-container">
+    <Bar
+      id="my-chart-id"
+      :options="chartOptions"
+      :data="chartData"
+    />
+  </div>
 </template>
 
 <script>
@@ -26,12 +28,12 @@ export default {
         datasets: [
           {
             label: 'Опасность у поезда',
-            backgroundColor: '#FF6384',
+            backgroundColor: '#e21a1a',
             data: [totalDucking],
           },
           {
             label: 'Отсутсвие СИЗ',
-            backgroundColor: '#36A2EB',
+            backgroundColor: '#d9802e',
             data: [totalVest],
           },
         ],
@@ -45,8 +47,17 @@ export default {
             beginAtZero: true
           }
         }
+        
       };
-    }
+    },
   }
 }
 </script>
+
+<style>
+.chart-container {
+  display: flex;
+  justify-content: center;
+  padding: 15rem;
+}
+</style>
